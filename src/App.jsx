@@ -9,7 +9,7 @@ import Employee from "./page/dashboard/employee/Employee";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 import Herbs from "./page/dashboard/herbs/Herbs";
-import Category from "./page/dashboard/herbs/category";
+import Category from "./page/dashboard/herbs/Category";
 import NotFound from "./page/NotFound";
 
 // website
