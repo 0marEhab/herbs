@@ -1,0 +1,38 @@
+{
+  "welcomeBack": "Welcome Back",
+  "homeDescription": "dashboard Home of A'shaaby",
+  "recentOrders": "Recent Orders",
+  "addNew": "Add New",
+  "addNewCustomer": "Add New Customer",
+  "customerName": "Customer Name",
+  "tag": "Tag",
+  "description": "Description",
+  "show": "Show",
+  "dashboardHome": {
+    "totalHerbs": "Total Herbs",
+    "totalUsers": "Total Users",
+    "totalOrders": "Total Orders",
+    "totalRevenue": "Total Revenue"
+  },
+  "navbar": {
+    "brand": "A'shaaby",
+    "home": "Home",
+    "products": "Products",
+    "about": "About us",
+    "login": "Login"
+  },
+  "section1": {
+    "title": "A'Shaaby Store",
+    "description": "Nature's Remedies, Delivered to Your Doorstep – Harness the Power of Herbs for a Healthier You!",
+    "button": "SHOP NOW"
+  },
+  "section2": {
+    "title": "The Story Behind Our Ocha House",
+    "description": "We also specialize in bubble tea, a beverage originating from Taiwan that combines freshly brewed teas with a large variety of exotic natural fruit concentrates, served cold with delicious chewy tapioca pearls.",
+    "button": "SHOP NOW"
+  },
+  "section3": {
+    "title": "BEST SELLER",
+    "subtitle": "Best Seller Product This Week!"
+  }
+}
