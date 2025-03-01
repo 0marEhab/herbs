@@ -15,7 +15,7 @@ import NotFound from "./page/NotFound";
 // website
 import Layout from "./components/layout/layout";
 import Products from "./page/website/Product/Products";
-import ProductDetails from "./page/website/productDetails/productDetails";
+import ProductDetails from "./page/website/productDetails/ProductDetails";
 import Cart from "./page/website/Cart/Cart";
 import AddProduct from "./components/dashboard/herbs/AddProduct";
 import { Toaster } from "@/components/ui/toaster";
