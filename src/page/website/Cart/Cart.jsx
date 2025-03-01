@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import React, { useContext, useEffect, useState } from "react";
 import { Trash2 } from "lucide-react"; // Import Trash2 icon for delete
 import { useDispatch, useSelector } from "react-redux";
