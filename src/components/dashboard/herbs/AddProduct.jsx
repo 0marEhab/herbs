@@ -33,7 +33,7 @@ export default function AddProduct() {
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 20 * 1024 * 1024; // 20MB
     const maxImages = 5;
 
     // Filter valid images
@@ -49,7 +49,7 @@ export default function AddProduct() {
       if (file.size > maxSize) {
         toast({
           variant: "destructive",
-          title: "Each image must be smaller than 5MB.",
+          title: "Each image must be smaller than 20MB.",
         });
 
         return false;

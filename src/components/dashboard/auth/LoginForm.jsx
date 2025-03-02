@@ -127,7 +127,7 @@ export default function LoginForm() {
       </form>
       <p className="text-center text-gray-600 mt-4">
         Don't have an account?{" "}
-        <Link to="/register" className="text-green-600">
+        <Link to="/login" className="text-green-600">
           Register
         </Link>
       </p>
