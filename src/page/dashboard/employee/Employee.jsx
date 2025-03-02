@@ -58,11 +58,7 @@ export default function Employee() {
           },
         }
       );
-      setData((prevData) =>
-        prevData.map((user) =>
-          user._id === selectedUser._id ? { ...user, role: newRole } : user
-        )
-      );
+      window.location.reload();
       setIsModalOpen(false);
     } catch (error) {
       console.log(error);

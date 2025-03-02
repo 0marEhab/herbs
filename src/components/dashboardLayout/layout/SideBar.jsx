@@ -50,7 +50,7 @@ export default function SideBar({ ...props }) {
         isActive: true,
         items: [
           {
-            title: "Herbs",
+            title: "Products",
             url: "/dashboard/Herbs",
           },
           {
@@ -113,8 +113,8 @@ export default function SideBar({ ...props }) {
   };
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
+      <SidebarContent >
+        <NavMain  items={data.navMain} />
       </SidebarContent>
 
       <SidebarRail />

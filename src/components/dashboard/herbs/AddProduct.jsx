@@ -8,6 +8,7 @@ import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { useCookies } from "react-cookie";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const INITIAL_FORM_DATA = {
   ArabicName: "",
@@ -29,7 +30,7 @@ export default function AddProduct() {
   const [cookies, setCookies] = useCookies(["accessToken"]);
   const { i18n } = useTranslation();
   const language = i18n.language;
-
+  const navigate = useNavigate();
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
@@ -176,12 +177,15 @@ export default function AddProduct() {
           },
         }
       );
+      console.log(response);
       toast({
         title: "Congratulations",
         description: "product added successfully",
       });
       setMessage(response.data.message);
       setFormData(INITIAL_FORM_DATA);
+      navigate("/dashboard/employee");
+      window.location.reload();
     } catch (err) {
       setMessage(err.response?.data?.message || "Error occurred");
       toast({
