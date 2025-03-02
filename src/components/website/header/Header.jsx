@@ -131,6 +131,14 @@ const Navbar = () => {
                     >
                       Logout
                     </button>
+                    {(user.role == "Admin" || user.role == "Employee") && (
+                      <Link
+                        to="/dashboard"
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      >
+                        Dashboard
+                      </Link>
+                    )}
                   </motion.div>
                 )}
               </div>
@@ -173,6 +181,14 @@ const Navbar = () => {
               >
                 Profile
               </Link>
+              {(user.role == "Admin" || user.role == "Employee") && (
+                <Link
+                  to="/dashboard"
+                  className="block w-[250px] text-center py-2 bg-gray-200 text-gray-700 rounded-lg mb-2 transition duration-200 hover:bg-gray-300"
+                >
+                  Dashboard
+                </Link>
+              )}
               <Link
                 to="/cart"
                 className="relative flex items-center justify-center w-[250px] text-gray-700 bg-gray-100 py-2 rounded-lg hover:bg-gray-200 transition duration-200"

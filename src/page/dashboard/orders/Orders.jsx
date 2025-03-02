@@ -9,39 +9,67 @@ export default function Orders() {
   const { user } = useContext(UserContext);
   const [cookies] = useCookies(["accessToken"]);
   const [orders, setOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [statusFilter, setStatusFilter] = useState("Pending");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const fetchOrdersByStatus = async (status) => {
+    try {
+      const res = await axios.get(
+        `${summaryApi.getOrderByStatus.url}?status=${status}`,
+        {
+          headers: { Authorization: `Bearer ${cookies.accessToken}` },
+        }
+      );
+      setOrders(res.data);
+      setFilteredOrders(res.data);
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+    }
+  };
 
   useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        const res = await axios.get(`${summaryApi.getAllOrder.url}`, {
-          headers: { Authorization: `Bearer ${cookies.accessToken}` },
-        });
-        console.log(res.data);
-        setOrders(res.data);
-      } catch (err) {
-        console.error("Error fetching orders:", err);
-      }
-    };
-    fetchOrder();
-  }, [user]);
+    fetchOrdersByStatus(statusFilter);
+  }, [statusFilter, user]);
 
   const updateOrderStatus = async (orderID, newStatus) => {
     try {
       await axios.put(
         `${summaryApi.changeStatus.url}?orderId=${orderID}&newStatus=${newStatus}`,
-        {}, // Empty request body
+        {},
         {
           headers: { Authorization: `Bearer ${cookies.accessToken}` },
         }
       );
-
       setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderID ? { ...order, status: newStatus } : order
+        )
+      );
+      setFilteredOrders((prevOrders) =>
         prevOrders.map((order) =>
           order.id === orderID ? { ...order, status: newStatus } : order
         )
       );
     } catch (error) {
       console.error("Error updating order status:", error);
+    }
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    if (!query) {
+      setFilteredOrders(orders);
+    } else {
+      setFilteredOrders(
+        orders.filter(
+          (order) =>
+            order.id.toString().includes(query) ||
+            order.userName.toLowerCase().includes(query)
+        )
+      );
     }
   };
 
@@ -55,8 +83,35 @@ export default function Orders() {
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">
         Admin Orders
       </h2>
+
+      <div className="flex flex-col md:flex-row gap-5 justify-between items-center mb-6">
+        <div className="flex flex-col md:flex-row gap-4">
+          {["Pending", "Canceled", "Delivered"].map((status) => (
+            <button
+              key={status}
+              onClick={() => setStatusFilter(status)}
+              className={`px-4 py-2 font-bold rounded transition ${
+                statusFilter === status
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-300 text-black"
+              }`}
+            >
+              {status}
+            </button>
+          ))}
+        </div>
+
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearch}
+          placeholder="Search by Order ID or User Name"
+          className="px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
       <div className="space-y-6">
-        {orders.map((order) => (
+        {filteredOrders.map((order) => (
           <motion.div
             key={order.id}
             whileHover={{ scale: 1.02 }}
@@ -72,12 +127,10 @@ export default function Orders() {
             <p className="text-lg font-medium text-gray-700">Products:</p>
             <ul className="list-disc list-inside text-gray-600">
               {order.items.map((product, index) => (
-                <div key={index}>
-                  <li>
-                    {product.productName} {product.productItemName}
-                  </li>
-                  <p className="ml-10">Quantity: {product.quantity}</p>
-                </div>
+                <li key={index}>
+                  {product.productName} {product.productItemName} (Quantity:{" "}
+                  {product.quantity})
+                </li>
               ))}
             </ul>
             <p className="text-lg font-medium text-gray-700">
@@ -96,22 +149,20 @@ export default function Orders() {
             <p className="text-lg font-medium text-gray-700">
               User: <span className="font-normal">{order.userName}</span>
             </p>
-
             <p className="text-lg font-medium text-gray-700">
               Status:{" "}
               <span
-                className={
+                className={`font-normal ${
                   order.status === "Pending"
                     ? "text-red-600"
-                    : order.status === "Confirmed"
+                    : order.status === "Delivered"
                     ? "text-green-600"
                     : "text-gray-600"
-                }
+                }`}
               >
                 {order.status}
               </span>
             </p>
-
             {order.status === "Pending" && (
               <div className="mt-4 flex gap-4">
                 <button

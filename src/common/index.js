@@ -102,6 +102,9 @@ const summaryApi = {
   getAllOrder: {
     url: "https://ashaabe.runasp.net/api/Order/all",
   },
+  getOrderByStatus: {
+    url: "https://ashaabe.runasp.net/api/Order/by-status",
+  },
   createOrder: {
     url: "https://ashaabe.runasp.net/api/Order/create",
   },

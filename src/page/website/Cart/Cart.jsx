@@ -103,9 +103,9 @@ export default function Cart() {
     const selectedAddr = addressList.find(
       (addr) => addr.value === selectedAddress
     );
-    console.log(selectedAddr);
+
     try {
-      await axios.post(
+      const res = await axios.post(
         `${summaryApi.createOrder.url}`,
         { userId: user.id, shipping_Address: selectedAddr.label },
         { headers: { Authorization: `Bearer ${cookies.accessToken}` } }
@@ -117,9 +117,17 @@ export default function Cart() {
       dispatch(
         fetchCart({ userId: user.id, accessToken: cookies.accessToken })
       );
+      console.log(res);
       // Open WhatsApp with a message
       const phoneNumber = "+201101740808";
-      let message = `Hello, I want to confirm my order.\nOrder ID: 1\nItems:\n`;
+      const items = res.data.items
+        .map(
+          (item) =>
+            `- [product name : ${item.productName}, product variant: (${item.productItemName}), qunatity: ${item.quantity}]`
+        )
+        .join("\n");
+
+      let message = `Hello, I want to confirm my order.\nOrder ID: ${res.data.id}\nItems:${items}\n Total Price: ${res.data.totalPrice} EGP\nShipping Address: ${res.data.shipping_Address}`;
 
       const encodedMessage = encodeURIComponent(message);
       const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
