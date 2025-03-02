@@ -1,6 +1,6 @@
 import summaryApi from "@/common";
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../../../public/a'shaby.png";
 import { useCookies } from "react-cookie";
 import UserContext from "@/Contexts/UserContext";
@@ -73,7 +73,11 @@ export default function LoginForm() {
         </p>
       </div>
       <form className="w-full max-w-sm space-y-4" onSubmit={handleLogin}>
-        {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
+        {error && (
+          <div className="mb-4 text-sm text-red-600 bg-red-100 p-3 rounded-md">
+            {error}
+          </div>
+        )}
         <div>
           <label
             className="block text-sm font-medium text-gray-700"
@@ -121,6 +125,12 @@ export default function LoginForm() {
           {loading ? "Logging in..." : "LOGIN"}
         </button>
       </form>
+      <p className="text-center text-gray-600 mt-4">
+        Don't have an account?{" "}
+        <Link to="/login" className="text-green-600">
+          Register
+        </Link>
+      </p>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import summaryApi from "@/common";
 import { X } from "lucide-react";
+import Select from "react-select";
 const AddressList = () => {
   const [addresses, setAddresses] = useState([]);
   const [newAddress, setNewAddress] = useState({
@@ -10,13 +11,41 @@ const AddressList = () => {
     city: "",
     state: "",
     postalCode: "",
-    countryId: 0,
+    countryId: "",
   });
+  const [countries, setCountries] = useState([]);
   const [cookie] = useCookies(["accessToken"]);
 
   useEffect(() => {
     fetchAddresses();
+    fetchCountry();
   }, []);
+
+  const handleCountryChange = (selectedOption) => {
+    setNewAddress((prev) => ({
+      ...prev,
+      countryId: selectedOption.value,
+    }));
+  };
+
+  const fetchCountry = async () => {
+    try {
+      const response = await axios.get(summaryApi.getCountry.url, {
+        headers: {
+          Authorization: `Bearer ${cookie.accessToken}`,
+        },
+      });
+
+      const formattedCountries = response.data.map((country) => ({
+        value: country.id, // or country.en if the backend expects the name
+        label: country.en, // Display English name in the dropdown
+      }));
+
+      setCountries(formattedCountries);
+    } catch (error) {
+      console.error("Error fetching countries:", error);
+    }
+  };
 
   const fetchAddresses = async () => {
     try {
@@ -33,6 +62,7 @@ const AddressList = () => {
 
   const handleAddAddress = async (e) => {
     e.preventDefault();
+    console.log(newAddress);
     try {
       await axios.post(summaryApi.address.url, newAddress, {
         headers: {
@@ -145,16 +175,13 @@ const AddressList = () => {
           className="w-full p-2 border rounded"
           required
         />
-        <input
-          type="number"
-          placeholder="Country ID"
-          value={newAddress.countryId}
-          onChange={(e) =>
-            setNewAddress({ ...newAddress, countryId: Number(e.target.value) })
-          }
-          className="w-full p-2 border rounded"
-          required
+        <Select
+          options={countries}
+          onChange={handleCountryChange}
+          placeholder="Select a Country"
+          className="text-black"
         />
+
         <button
           type="submit"
           className="w-full bg-gray-800 text-white py-2 rounded-lg text-lg font-medium shadow-md hover:bg-green-900 transition"

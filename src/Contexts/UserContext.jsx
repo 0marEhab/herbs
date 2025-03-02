@@ -45,7 +45,7 @@ export const UserProvider = ({ children }) => {
       }
     };
     initAuth();
-  }, [cookies]); // Add cookies as a dependency
+  }, [cookies.accessToken]);
 
   return (
     <UserContext.Provider value={{ user, setUser, accessToken }}>

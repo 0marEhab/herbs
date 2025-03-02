@@ -1,6 +1,3 @@
-import AddCategory from "@/components/dashboard/herbs/AddCategory";
-import Review from "@/components/website/productDetails/Review";
-
 const urlDomain = "http://localhost:3000";
 const summaryApi = {
   domain: {
@@ -32,6 +29,9 @@ const summaryApi = {
   },
   getAllAdminProduct: {
     url: "https://ashaabe.runasp.net/api/Product/all-products",
+  },
+  getBestSellerProduct: {
+    url: "https://ashaabe.runasp.net/api/Product/GetBestSoldItems",
   },
   getProduct: {
     url: "https://ashaabe.runasp.net/api/Product/",
@@ -110,6 +110,9 @@ const summaryApi = {
   },
   address: {
     url: "https://ashaabe.runasp.net/api/user-addresses",
+  },
+  getCountry: {
+    url: "https://ashaabe.runasp.net/api/Country",
   },
   statistics: {
     url: "https://ashaabe.runasp.net/api/Statistics/dashboard-stats",

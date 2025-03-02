@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, ShoppingCart, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import UserContext from "@/Contexts/UserContext";
@@ -20,7 +20,7 @@ const Navbar = () => {
   const { t } = useTranslation();
   const dir = useDirection();
   const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { items } = useSelector((state) => state.cart);
 
@@ -124,6 +124,7 @@ const Navbar = () => {
                     >
                       Profile
                     </Link>
+
                     <button
                       onClick={handleLogout}
                       className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
@@ -162,19 +163,30 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-gray-50 font-Dm">
+        <div className="md:hidden bg-gray-50 font-Dm flex flex-col items-center w-full py-4 shadow-md">
           <LanguageSwitcher />
           {user ? (
-            <div className="m-4">
+            <div className="m-4 flex flex-col items-center w-full">
               <Link
                 to="/profile"
-                className="block w-full text-center py-2 bg-gray-200 text-gray-700 rounded-md mb-2"
+                className="block w-[250px] text-center py-2 bg-gray-200 text-gray-700 rounded-lg mb-2 transition duration-200 hover:bg-gray-300"
               >
                 Profile
               </Link>
+              <Link
+                to="/cart"
+                className="relative flex items-center justify-center w-[250px] text-gray-700 bg-gray-100 py-2 rounded-lg hover:bg-gray-200 transition duration-200"
+              >
+                <ShoppingCart size={24} />
+                {items?.items?.length > 0 && (
+                  <span className="absolute  right-0 bg-gray-500 text-white text-xs flex justify-center items-center font-bold rounded-l-lg h-full w-7  ">
+                    <p>{items?.items?.length}</p>
+                  </span>
+                )}
+              </Link>
               <button
                 onClick={handleLogout}
-                className="block w-full text-center py-2 bg-red-500 text-white rounded-md"
+                className="block w-[250px] text-center py-2 bg-red-500 text-white rounded-lg mt-2 hover:bg-red-600 transition duration-200"
               >
                 Logout
               </button>
@@ -182,21 +194,21 @@ const Navbar = () => {
           ) : (
             <Link
               to="/login"
-              className="block w-full text-center py-2 bg-blue-500 text-white rounded-md"
+              className="block w-[250px] mt-4 text-center py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition duration-200"
             >
               {t("navbar.login")}
             </Link>
           )}
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <div className="w-full flex flex-col items-center pt-2">
             <Link
               to="/"
-              className="block px-3 py-2 text-gray-700 hover:text-gray-900"
+              className="block w-[250px] py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition duration-200 text-center"
             >
               {t("navbar.home")}
             </Link>
             <Link
               to="/products"
-              className="block px-3 py-2 text-gray-700 hover:text-gray-900"
+              className="block w-[250px] py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition duration-200 text-center"
             >
               {t("navbar.products")}
             </Link>

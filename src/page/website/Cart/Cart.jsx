@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import summaryApi from "@/common";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 export default function Cart() {
   const { user } = useContext(UserContext);
   const { i18n } = useTranslation();
@@ -133,9 +134,10 @@ export default function Cart() {
   const total =
     cartItems?.items?.reduce(
       (acc, item) =>
-        acc + item.hasDiscount
+        acc +
+        (item.hasDiscount
           ? item.discountedPrice * item.quantity
-          : item.price * item.quantity,
+          : item.price * item.quantity),
       0
     ) || 0;
 
@@ -247,7 +249,7 @@ export default function Cart() {
         <Button
           className="mt-4 rounded-xl"
           onClick={() => setIsModalOpen(true)}
-          disabled={cartItems?.items?.length === 0}
+          disabled={!cartItems?.items || cartItems?.items.length === 0}
         >
           Order →
         </Button>
@@ -257,9 +259,19 @@ export default function Cart() {
           <div className="bg-white p-6 rounded-lg w-96 shadow-lg">
             <h2 className="text-xl font-bold mb-4">Select Address</h2>
             {addressList.length == 0 ? (
-              <p className=" m-5 bg-slate-300 py-3 px-4 font-body font-bold rounded-xl">
-                please add an address from your profile
-              </p>
+              <>
+                <p className=" m-5 bg-slate-300 py-3 px-4 font-body font-bold rounded-xl">
+                  please add an address from your profile{" "}
+                  <span>
+                    <Link
+                      to="/profile"
+                      className="bg-blue-400 hover:bg-blue-600 duration-300 shadow shadow-black px-2 py-1 rounded-xl"
+                    >
+                      go to profile
+                    </Link>
+                  </span>
+                </p>
+              </>
             ) : (
               <select
                 className="w-full p-2 border rounded-md mb-4"

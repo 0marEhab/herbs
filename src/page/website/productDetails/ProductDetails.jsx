@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import ProductDetail from "@/components/website/productDetails/ProductDetail";
 import {
@@ -13,6 +13,7 @@ import summaryApi from "@/common";
 import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useTranslation } from "react-i18next";
+import UserContext from "@/Contexts/UserContext";
 
 export default function ProductDetails() {
   const [cookies] = useCookies(["accessToken"]);
@@ -20,6 +21,7 @@ export default function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [error, setError] = useState(false);
   const { i18n } = useTranslation();
+  const { user } = useContext(UserContext);
   const language = i18n.language;
 
   useEffect(() => {
@@ -96,7 +98,21 @@ export default function ProductDetails() {
           <AccordionItem value="item-3">
             <AccordionTrigger>Reviews</AccordionTrigger>
             <AccordionContent>
-              <Review />
+              {user ? (
+                <Review />
+              ) : (
+                <div className="flex flex-col items-center justify-center p-4 bg-gray-100 rounded-lg shadow-md">
+                  <p className="text-gray-600 text-lg font-medium">
+                    You need to be logged in to view reviews.
+                  </p>
+                  <a
+                    href="/login"
+                    className="mt-3 px-6 py-2 bg-gray-900 text-white font-semibold rounded-md shadow-lg hover:bg-green-900 transition-all duration-300"
+                  >
+                    Login Now
+                  </a>
+                </div>
+              )}
             </AccordionContent>
           </AccordionItem>
         </Accordion>

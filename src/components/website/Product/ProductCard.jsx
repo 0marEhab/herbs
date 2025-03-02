@@ -19,7 +19,7 @@ export default function ProductCard({ product }) {
   const { i18n } = useTranslation();
   const language = i18n.language;
   const images = product.covers || []; // Ensure images are provided
-  console.log(product);
+
   return (
     <div className="w-[300px] bg-white shadow-lg rounded-lg overflow-hidden pb-4 relative group duration-300">
       <Link to={`/product/${product.productId}`}>
@@ -53,14 +53,34 @@ export default function ProductCard({ product }) {
           <p className="text-gray-600 text-md">
             Category:{" "}
             {language == "en"
-              ? product?.categoryName.en
+              ? product?.categoryName?.en
               : product?.categoryName.ar}
           </p>
 
-          <p className="text-gray-500 my-3 flex gap-2 text-lg items-center jusc">
-            {product.avgRate == 0 ? "(No reviews yet)" : product.avgRate}
-            <Star size={15} />
-          </p>
+          <div className="flex items-center gap-2 my-3">
+            {product.avgRate > 0 ? (
+              <>
+                <span className="text-lg font-semibold text-yellow-500">
+                  {product.avgRate.toFixed(1)}
+                </span>
+                <div className="flex items-center">
+                  {Array.from({ length: 5 }, (_, index) => (
+                    <Star
+                      key={index}
+                      size={16}
+                      className={
+                        index < Math.round(product.avgRate)
+                          ? "text-yellow-500 fill-yellow-500"
+                          : "text-gray-300"
+                      }
+                    />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <span className="text-gray-500 text-sm">(No reviews yet)</span>
+            )}
+          </div>
           <div className="text-lg font-bold mt-2">
             {product.hasDiscount ? (
               <>

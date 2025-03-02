@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import summaryApi from "@/common";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -302,6 +302,12 @@ export default function Register() {
             Register
           </motion.button>
         </form>
+        <p className="text-center text-gray-600 mt-4">
+          Already have an account?{" "}
+          <Link to="/login" className="text-green-600">
+            Login
+          </Link>
+        </p>
       </motion.div>
     </div>
   );

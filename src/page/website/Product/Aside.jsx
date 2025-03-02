@@ -1,11 +1,18 @@
+import summaryApi from "@/common";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 import React, { useState, useRef, useEffect } from "react";
+import { useCookies } from "react-cookie";
+import { useTranslation } from "react-i18next";
 
 export default function Aside({ onFilterChange }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [category, setCategory] = useState([]);
+  const [cookies, setCookies] = useCookies(["accessToken"]);
   const sidebarRef = useRef(null);
   const buttonRef = useRef(null);
-
+  const { i18n } = useTranslation();
+  const language = i18n.language;
   // State for filters
   const [localFilters, setLocalFilters] = useState({
     categoryId: "",
@@ -13,6 +20,19 @@ export default function Aside({ onFilterChange }) {
     maxPrice: "",
     search: "",
   });
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      const response = await axios.get(summaryApi.getCategory.url, {
+        headers: {
+          Authorization: `Bearer ${cookies.accessToken}`,
+        },
+      });
+      console.log(response.data);
+      setCategory(response.data);
+    };
+    fetchCategory();
+  }, []);
 
   // Toggle sidebar visibility
   const toggleSidebar = () => {
@@ -143,8 +163,13 @@ export default function Aside({ onFilterChange }) {
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               >
                 <option value="">All Categories</option>
-                <option value="1">Category 1</option>
-                <option value="2">Category 2</option>
+                {category?.map((cat) => {
+                  return (
+                    <option key={cat.id} value={cat.id}>
+                      {language == "en" ? cat.englishName : cat.arabicName}
+                    </option>
+                  );
+                })}
               </select>
             </div>
 

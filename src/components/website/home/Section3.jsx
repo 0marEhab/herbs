@@ -21,12 +21,12 @@ export default function Section3() {
         pageNumber: 1,
         pageSize: 8,
       }).toString();
-      const url = `${summaryApi.getAllProduct.url}?${queryParams}`;
+      const url = `${summaryApi.getBestSellerProduct.url}?${queryParams}`;
 
       const response = await fetch(url);
       const data = await response.json();
 
-      setProducts(data.items);
+      setProducts(data.items || []);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -63,7 +63,7 @@ export default function Section3() {
         {t("section3.subtitle")}
       </motion.p>
 
-      {/* Product Cards */}
+      {/* Product Cards or "Coming Soon" Message */}
       <motion.div
         className="flex justify-center items-start gap-4 flex-col lg:flex-row flex-wrap lg:w-[1300px]"
         initial="hidden"
@@ -76,28 +76,42 @@ export default function Section3() {
           },
         }}
       >
-        {isLoading
-          ? Array.from({ length: 8 }).map((_, index) => (
-              <motion.div
-                key={index}
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: { opacity: 1 },
-                }}
-              >
-                <ProductCardSkeleton />
-              </motion.div>
-            ))
-          : products.map((product, index) => (
-              <motion.div
-                key={product.productId}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <ProductCard product={product} />
-              </motion.div>
-            ))}
+        {isLoading ? (
+          // Show loading skeletons
+          Array.from({ length: 8 }).map((_, index) => (
+            <motion.div
+              key={index}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1 },
+              }}
+            >
+              <ProductCardSkeleton />
+            </motion.div>
+          ))
+        ) : products.length < 8 ? (
+          // Show "Coming Soon" if there are not enough products
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-2xl text-gray-500 font-medium"
+          >
+            {t("section3.comingSoon") || "Coming Soon"}
+          </motion.p>
+        ) : (
+          // Render products if there are at least 8
+          products.map((product, index) => (
+            <motion.div
+              key={product.productId}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <ProductCard product={product} />
+            </motion.div>
+          ))
+        )}
       </motion.div>
     </div>
   );
